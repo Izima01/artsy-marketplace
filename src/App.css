@@ -1,0 +1,21 @@
+/* .swiper-wrapper {
+    position: relative;
+    height: 22rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+.slider {
+    width: 100%;
+    height: auto;
+    background-color: white;
+}
+
+.thumb {
+    cursor: grab;
+}
+
+.slider .thumb:last-child {
+    background-color: black;
+}

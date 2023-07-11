@@ -8,12 +8,12 @@ const FilterPrice = ({ values, setValues }) => {
   const [showPriceRange, setshowPriceRange] = useState(false);
 
   return (
-    <div className='mb-6'>
-        <button className="w-1/2 flex justify-between items-center group" type='button' onClick={() => setshowPriceRange(!showPriceRange)}>
+    <div className='mb-6 md:mb-4 md:w-full'>
+        <button className="w-1/2 md:w-full flex justify-between items-center group" type='button' onClick={() => setshowPriceRange(!showPriceRange)}>
             <p className='font-semibold text-xl'>By Price</p>
             <img src={down} alt="" className={`transition duration-300 ${showPriceRange ? 'rotate-180' : 'rotate-0'}`} />
         </button>
-        <section className={`w-full overflow-hidden pl-3 ${showPriceRange ? 'max-h-36 h-28' : 'max-h-0'}`}>
+        <section className={`w-full overflow-hidden pl-3 md:pl-0 ${showPriceRange ? 'max-h-36 h-28' : 'max-h-0'}`}>
             <h4 className='py-8'>
                 ${values[0]}.00 - ${values[1]}.00
             </h4>

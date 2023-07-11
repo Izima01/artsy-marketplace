@@ -37,10 +37,9 @@ const Hero = () => {
         ))}
       </div>
       <Swiper
-        className='mt-12'
+        className='mt-12 hidden sm:block'
         spaceBetween={20}
         autoplay={true}
-        // slidesPerView={3}
         loop={true}
       >
         {obj.map(({img}, i) => (

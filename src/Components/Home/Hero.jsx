@@ -43,7 +43,7 @@ const Hero = () => {
       >
         {obj.map(({img}, i) => (
           <SwiperSlide key={i}>
-            <img src={img} className='w-full h-[720px]' alt="" />
+            <img src={img} className='w-full md:h-[720px]' loading='lazy' alt="" />
           </SwiperSlide>
         ))}
       </Swiper>

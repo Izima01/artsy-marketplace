@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import down from '../assets/down.png';
-import ProductCard from '../Components/ProductCard';
+import ProductCard from '../Components/Marketplace/ProductCard';
 // import { getDownloadURL, listAll, ref } from 'firebase/storage';
 import { db } from '../config/firebase.js'
 import { getDocs, collection } from 'firebase/firestore';
@@ -8,10 +9,13 @@ import FilterCategory from '../Components/Marketplace/FilterCategory';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import {VscSettings} from 'react-icons/vsc';
 import FilterPrice from '../Components/Marketplace/FilterPrice';
+import LoadingCard from '../Components/Marketplace/LoadingCard';
 
 const Marketplace = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState("");
+  const [searchTerm, setsearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const [productsData, setProductsData] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -21,6 +25,7 @@ const Marketplace = () => {
   const [endNumber, setEndNumber] = useState(5);
   const productsRef = collection(db, "products");
 
+  // showing all the products if you're using a big screen
   useEffect(() => {
     if (window.innerWidth > 768) {
       setEndNumber(14);
@@ -34,6 +39,8 @@ const Marketplace = () => {
         const grabbedData = data.docs.map((doc) => ({...doc.data(), id: doc.id}));
         setProductsData(grabbedData);
         setFilteredProducts(grabbedData);
+        setIsLoading(false);
+        localStorage.setItem('products', JSON.stringify(grabbedData));
       } catch (err) {
         console.log(err);
       }
@@ -42,31 +49,44 @@ const Marketplace = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // custom effect for storing fetched data on local storage
+  // useEffect(() => {
+  //   let stored = JSON.parse(localStorage.getItem('products'));
+  //   // console.log(stored);
+  //   setProductsData(stored);
+  //   setIsLoading(false);
+  //   setFilteredProducts(stored);
+  // }, []);
+
+  // searching for a product
+  useEffect(() => {
+    let searched = productsData.filter((prod) => prod.name.includes(searchTerm));
+    setFilteredProducts(searched);
+  }, [searchTerm]);
+
+  // sorting by name or price
   useEffect(() => {
     if (sortBy == 'name') {
-      let nameSort = productsData.sort((a,b) => a.name !== b.name ? a.name < b.name ? -1: 1 : 0);
-      console.log(nameSort);
-    } else {
-      // console.log('tis a price thing');
-      let priceSort = productsData.sort((a,b) => a.price !== b.price ? a.price < b.price ? -1: 1 : 0);
-      console.log(priceSort);
-      // (filteredProducts.length === 0 ? productsData : filteredProducts).sort((a,b) => a.price !== b.price ? a.price < b.price ? -1: 1 : 0);
+      let nameSort = productsData.sort((a,b) => a.name.localeCompare(b.name));
+      setFilteredProducts(nameSort);
+    } else if (sortBy == 'price') {
+      let priceSort = productsData.sort((a,b) => a.price - b.price);
+      setFilteredProducts(priceSort);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
 
-  useEffect(() => {
-    console.log(categories);
-    setFilteredProducts(productsData.filter(prod => categories.includes(prod.category)));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categories]);
-
+  
+  // selecting a price range
   useEffect(() => {
     let newFilter = productsData.filter(prod => prod.price >= priceRange[0]);
     newFilter = newFilter.filter(prod => prod.price <= priceRange[1]);
     setFilteredProducts(newFilter);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceRange]);
+  
+  // changing the category
+  useEffect(() => {
+    setFilteredProducts(productsData.filter(prod => categories.includes(prod.category)));
+  }, [categories]);
 
   const changeCategory = (e) => {
     if (e.target.checked) {
@@ -79,7 +99,14 @@ const Marketplace = () => {
   return (
     <div className="w-[85%] sm:w-[92%] lg:w-[85%] mx-auto flex-col flex gap-12 md:gap-6 pb-6">
       <header className='w-full md:flex pt-10 hidden sticky top-0 justify-between gap-10 items-center bg-[#eeeeee] pb-2'>
-        <input type="search" name="" id="" placeholder='Search' className='placeholder:text-white bg-gray-300 rounded-lg pl-2.5 lg:w-2/12 w-3/12 py-2.5' />
+        <input
+          type="search"
+          value={searchTerm}
+          placeholder='Search...'
+          onChange={(e) => setsearchTerm(e.target.value)}
+          className='placeholder:text-white bg-gray-300 rounded-lg pl-2.5 lg:w-2/12 w-3/12 py-2.5'
+        />
+
         <form className="w-full bg-white p-4 rounded-2xl flex justify-between items-center shadow-lg">
           <p className='md:hidden'>Showing 1-{endNumber > filteredProducts.length ? '5' : filteredProducts.length} of {filteredProducts.length} results</p>
           <p className='hidden md:block'>Showing 1-{filteredProducts.length} of {filteredProducts.length} results</p>
@@ -153,11 +180,14 @@ const Marketplace = () => {
         {/* Main page for products */}
         <main className='flex flex-col gap-6 w-full flex-wrap md:flex-row md:gap-0 md:justify-start'>
           {
-            (categories.length == 0 && priceRange[0] == 20 && priceRange[1] == 90 && !sortBy) ? productsData.slice(0, endNumber).map(({name, pic, price, id}) => (
-              <ProductCard key={id} name={name} pic={pic} price={price} />
+            isLoading ? (
+              <LoadingCard />
+            ) :
+            (categories.length == 0 && priceRange[0] == 20 && priceRange[1] == 90 && !sortBy && !searchTerm) ? productsData.slice(0, endNumber).map(({name, pic, price, id}) => (
+              <ProductCard id={id} key={id} name={name} pic={pic} price={price} />
             ))
             : filteredProducts.slice(0, endNumber).map(({name, pic, price, id}) => (
-              <ProductCard key={id} name={name} pic={pic} price={price} />
+              <ProductCard key={id} id={id} name={name} pic={pic} price={price} />
             ))
           }
           <button className={`justify-end gap-4 items-center flex md:hidden`} onClick={() => setEndNumber(endNumber == 5 ? 14 : 5)}>

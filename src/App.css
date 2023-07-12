@@ -19,3 +19,23 @@
 .slider .thumb:last-child {
     background-color: black;
 }
+
+.loading {
+    background: linear-gradient(120deg, grey 25%, white 75%);
+    animation: load 1000ms infinite linear;
+}
+
+@keyframes load {
+    0% {
+        background: linear-gradient(105deg, grey 25%, rgb(179, 177, 177) 75%);
+    }
+    30% {
+        background: linear-gradient(105deg, grey 50%, rgb(179, 177, 177) 100%);
+    }
+    70% {
+        background: linear-gradient(105deg, rgb(179, 177, 177) 0%, grey 50%);
+    }
+    100% {
+        background: linear-gradient(105deg, grey 25%, rgb(179, 177, 177) 75%);
+    }
+}

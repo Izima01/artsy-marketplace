@@ -42,6 +42,10 @@ const router = createBrowserRouter([
         element:<Marketplace />,
       },
       {
+        path:"/products/:productId",
+        element: <ProductDetail />,
+      },
+      {
         path:"/auctions/live/drops",
         element:<AuctionDrops />,
       },
@@ -50,10 +54,6 @@ const router = createBrowserRouter([
   {
     path:"/auctions/live/:auctionId",
     element:<LiveAuction />,
-  },
-  {
-    path:"/products/:productId",
-    element: <ProductDetail />,
   },
   {
     path:"/products/checkout",

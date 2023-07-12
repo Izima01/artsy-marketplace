@@ -184,10 +184,10 @@ const Marketplace = () => {
               <LoadingCard />
             ) :
             (categories.length == 0 && priceRange[0] == 20 && priceRange[1] == 90 && !sortBy && !searchTerm) ? productsData.slice(0, endNumber).map(({name, pic, price, id}) => (
-              <ProductCard id={id} key={id} name={name} pic={pic} price={price} />
+              <ProductCard isLoading={isLoading} id={id} key={id} name={name} pic={pic} price={price} />
             ))
             : filteredProducts.slice(0, endNumber).map(({name, pic, price, id}) => (
-              <ProductCard key={id} id={id} name={name} pic={pic} price={price} />
+              <ProductCard isLoading={isLoading} key={id} id={id} name={name} pic={pic} price={price} />
             ))
           }
           <button className={`justify-end gap-4 items-center flex md:hidden`} onClick={() => setEndNumber(endNumber == 5 ? 14 : 5)}>

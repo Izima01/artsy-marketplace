@@ -40,7 +40,7 @@ const Marketplace = () => {
         setProductsData(grabbedData);
         setFilteredProducts(grabbedData);
         setIsLoading(false);
-        localStorage.setItem('products', JSON.stringify(grabbedData));
+        // localStorage.setItem('products', JSON.stringify(grabbedData));
       } catch (err) {
         console.log(err);
       }

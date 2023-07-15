@@ -6,14 +6,14 @@ import { cartActions } from "../store/cartSlice";
 import { db } from '../config/firebase.js'
 import { getDocs, collection } from 'firebase/firestore';
 import {useParams} from 'react-router-dom';
-import image from '../assets/Carousel-1.png';
+// import image from '../assets/Carousel-1.png';
 
 const ProductDetail = () => {
   let { productId } =  useParams();
   const [count, setCount] = useState(1);
   const dispatch = useDispatch();
   const [product, setProduct] = useState({});
-  const { id=23211, name='name', pic=image, price=25, category='nature' } = product;
+  const { id, name, pic, price, category } = product;
 
   const addToCart = () => {
     dispatch(cartActions.addToCart({

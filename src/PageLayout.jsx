@@ -10,7 +10,7 @@ const PageLayout = () => {
     const dispatch = useDispatch();
 
     return (
-        <div className="w-full bg-[#eeeeee]">
+        <div className="w-full bg-[#f0eeee]">
         <header className="w-full flex justify-between items-center pt-6 px-4 sm:hidden">
             <AiOutlineMenu
                 size="32px"

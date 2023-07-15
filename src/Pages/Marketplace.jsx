@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import down from '../assets/down.png';
 import ProductCard from '../Components/Marketplace/ProductCard';
-// import { getDownloadURL, listAll, ref } from 'firebase/storage';
 import { db } from '../config/firebase.js'
 import { getDocs, collection } from 'firebase/firestore';
 import FilterCategory from '../Components/Marketplace/FilterCategory';
@@ -10,6 +8,7 @@ import { AiOutlineArrowRight } from 'react-icons/ai';
 import {VscSettings} from 'react-icons/vsc';
 import FilterPrice from '../Components/Marketplace/FilterPrice';
 import LoadingCard from '../Components/Marketplace/LoadingCard';
+import MobileAside from '../Components/Marketplace/MobileAside';
 
 const Marketplace = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -60,8 +59,7 @@ const Marketplace = () => {
 
   // searching for a product
   useEffect(() => {
-    let searched = productsData.filter((prod) => prod.name.includes(searchTerm));
-    setFilteredProducts(searched);
+    setFilteredProducts(productsData.filter((prod) => prod.name.includes(searchTerm)));
   }, [searchTerm]);
 
   // sorting by name or price
@@ -74,7 +72,6 @@ const Marketplace = () => {
       setFilteredProducts(priceSort);
     }
   }, [sortBy]);
-
   
   // selecting a price range
   useEffect(() => {
@@ -108,7 +105,9 @@ const Marketplace = () => {
         />
 
         <form className="w-full bg-white p-4 rounded-2xl flex justify-between items-center shadow-lg">
-          <p className='md:hidden'>Showing 1-{endNumber > filteredProducts.length ? '5' : filteredProducts.length} of {filteredProducts.length} results</p>
+          <p className='md:hidden'>
+            Showing 1-{endNumber > filteredProducts.length ? '5' : filteredProducts.length} of {filteredProducts.length} results
+          </p>
           <p className='hidden md:block'>Showing 1-{filteredProducts.length} of {filteredProducts.length} results</p>
           <select
             value={sortBy}
@@ -123,58 +122,32 @@ const Marketplace = () => {
       </header>
       <section className='flex flex-col md:flex-row md:gap-10'>
         {/* Mobile aside */}
-        <aside className="md:hidden">
-          <h3 className="mt-7 text-[#BCB7B7] text-lg font-medium mb-4 md:hidden">Home/ Marketplace</h3>
-          <p className='md:hidden'>Showing 1-{endNumber > filteredProducts.length ? '5' : filteredProducts.length} of {filteredProducts.length} results</p>
-          <form className="w-full bg-white p-5 mt-4 rounded-2xl transition-all duration-700 ease-in-out md:hidden">
-            <header className='flex justify-between items-center'>
-              <button
-                type='button'
-                className={`flex w-3/12 items-center text-xl justify-between py-1 ${showFilters ? 'border-b-[#AFB091] border-b-4' : ''}`}
-                onClick={() => setShowFilters(!showFilters)}
-              >Filters
-                <img src={down} alt="" className={`transition duration-500 ${showFilters ? 'rotate-180' : ''}`} />
-              </button>
-
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className='flex w-4/12 text-xl justify-between items-center'
-              >
-                <option className='text-lg' value="" disabled>Sort by</option>
-                <option className='text-lg' value="name">Name</option>
-                <option className='text-lg' value="price">Price</option>
-              </select>
-            </header>
-            <section style={{ transition: "max-height 0.5s ease-out" }} className={`gap-6 flex flex-col overflow-hidden ${showFilters ? ' mt-6 max-h-none' : 'max-h-0'}`}>
-              <FilterPrice values={priceRange} setValues={setPriceRange} />
-              <FilterCategory
-                changeCategory={changeCategory}
-              />
-            </section>
-          </form>
-        </aside>
+        <MobileAside
+          endNumber={endNumber}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          filteredProducts={filteredProducts}
+          setShowFilters={setShowFilters}
+          showFilters={showFilters}
+          changeCategory={changeCategory}
+        />
 
         {/* Desktop aside */}
         <aside className="hidden md:block w-3/12 lg:w-2/12 mb-6 h-fit sticky top-28">
-          {/* <div className='h-full sticky top-16 w-full'> */}
-            <header className='flex justify-between items-center'>
-              <label
-                type='button'
-                className='flex w-full items-center text-xl font-semibold gap-4 py-1 mb-12 border-b-[#AFB091] border-b-4'
-              >
-                <VscSettings />
-                Filter
-              </label>
-            </header>
-            <section className='gap-6 flex flex-col'>
-              <FilterPrice values={priceRange} setValues={setPriceRange} />
-              <FilterCategory
-                changeCategory={changeCategory}
-                categories={categories}
-              />
-            </section>
-          {/* </div> */}
+          <header className='flex justify-between items-center'>
+            <label
+              type='button'
+              className='flex w-full items-center text-xl font-semibold gap-4 py-1 mb-12 border-b-[#AFB091] border-b-4'>
+              <VscSettings />
+              Filter
+            </label>
+          </header>
+          <section className='gap-6 flex flex-col'>
+            <FilterPrice values={priceRange} setValues={setPriceRange} />
+            <FilterCategory changeCategory={changeCategory} categories={categories} />
+          </section>
         </aside>
 
         {/* Main page for products */}

@@ -4,7 +4,7 @@ import img3 from '../../assets/Carousel-3.png';
 import img4 from '../../assets/Carousel-4.png';
 import img5 from '../../assets/Carousel-5.png';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectFlip } from 'swiper';
+import { Autoplay } from 'swiper';
 
 import 'swiper/css';
 
@@ -36,14 +36,13 @@ const Hero = () => {
       <Swiper
         className='mt-12'
         spaceBetween={20}
-        modules={[ Autoplay, EffectFlip ]}
+        modules={[ Autoplay ]}
         autoplay
-        effect='flip'
         loop={true}
       >
         {obj.map(({img}, i) => (
           <SwiperSlide key={i}>
-            <img src={img} className='w-full md:h-[720px]' loading='lazy' alt="" />
+            <img src={img} className='w-full' loading='lazy' alt="" />
           </SwiperSlide>
         ))}
       </Swiper>

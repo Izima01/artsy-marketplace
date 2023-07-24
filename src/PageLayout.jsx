@@ -1,5 +1,5 @@
-import { AiOutlineMenu, AiOutlineSearch, AiOutlineShoppingCart, AiOutlineBell } from 'react-icons/ai'
-import { useDispatch } from 'react-redux'
+import { AiOutlineMenu, AiOutlineSearch, AiOutlineShoppingCart, AiOutlineBell } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux'
 import { navActions } from './store/navSlice';
 import logo from './assets/logo.png';
 import { Link, NavLink, Outlet } from 'react-router-dom';
@@ -8,6 +8,7 @@ import NavBar, { navs } from './Components/NavBar';
 
 const PageLayout = () => {
     const dispatch = useDispatch();
+    const isChanged = useSelector((state) => state.cart.isChanged);
 
     return (
         <div className="w-full bg-[#f0eeee]">
@@ -24,9 +25,11 @@ const PageLayout = () => {
             </Link>
             <div className="flex gap-3">
                 <AiOutlineSearch size="26px" />
-                <div>
+                <Link to='/products/checkout/cart' className='relative'>
                   <AiOutlineShoppingCart size="26px" />
-                </div>
+                  {isChanged && <div className='w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0' />}  
+
+                </Link>
             </div>
         </header>
         <header className="sm:flex justify-between items-center pt-6 md:w-10/12 sm:w-11/12 mx-auto hidden">
@@ -43,7 +46,11 @@ const PageLayout = () => {
             <div className="flex gap-3">
                 <AiOutlineSearch size="26px" />
                 {/* <div> */}
+                  {/* <AiOutlineShoppingCart size="26px" /> */}
+                <Link to='/products/checkout/cart' className='relative'>
+                  {isChanged && <div className='w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0' />}  
                   <AiOutlineShoppingCart size="26px" />
+                </Link>
                   <AiOutlineBell size="26px" />
                 {/* </div> */}
             </div>

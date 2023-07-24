@@ -20,10 +20,11 @@ const NavBar = () => {
   
   useEffect(() => {
     dispatch(navActions.toggleNav(false));
-  }, [activePage, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePage]);
   
   return (
-    <div className={`w-[80%] fixed left-0 top-0 bg-white p-8 transition-all duration-500 z-10 ${navOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+    <div className={`w-[80%] fixed left-0 top-0 h-screen bg-white p-8 transition-all duration-500 z-10 ${navOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className='w-full flex justify-between items-center mb-3'>
           <img src={logo} alt="" />
           <GrClose size="28px" className='hover:-rotate-90 transition duration-200' onClick={() => dispatch(navActions.toggleNav(false))} />

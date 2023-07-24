@@ -6,9 +6,9 @@ import { cartActions } from "../store/cartSlice";
 import { db } from '../config/firebase.js'
 import { getDocs, collection } from 'firebase/firestore';
 import {useParams} from 'react-router-dom';
-// import image from '../assets/Carousel-1.png';
 
 const ProductDetail = () => {
+  // const cart = useSelector((state) => state.cart.itemsList);
   let { productId } =  useParams();
   const [count, setCount] = useState(1);
   const dispatch = useDispatch();
@@ -20,9 +20,12 @@ const ProductDetail = () => {
       name,
       id,
       price,
-      count
+      quantity: count,
+      pic,
+      category
     }));
   };
+
   const productsRef = collection(db, "products");
 
   useEffect(() => {
@@ -30,7 +33,9 @@ const ProductDetail = () => {
       try {
         const data = await getDocs(productsRef);
         const grabbedData = data.docs.map((doc) => ({...doc.data(), id: doc.id}));
+        // console.log(grabbedData);
         setProduct(grabbedData.find((prod) => prod.id === productId));
+        dispatch(cartActions.replaceCartData(grabbedData));
       } catch (err) {
         console.log(err);
       }
@@ -41,7 +46,7 @@ const ProductDetail = () => {
 
   return (
     <div className="w-[95%] md:w-[85%] mx-auto pb-10">
-      <h3 className="mt-10 text-[#a39e9e] text-xl pl-2 mb-6 md:mb-10 pb-4 border-b md:border-0 border-b-black">Home/ Marketplace/ {category || 'Editorial'}/ <b className='text-black'>{name || 'Philomena \'22'}</b> </h3>
+      <h3 className="mt-10 text-[#a39e9e] text-xl pl-2 mb-6 md:mb-10 pb-4 border-b md:border-0 border-b-black capitalize">Home/ Marketplace/ {category || 'dance'}/ <b className='text-black'>{name || 'Philomena \'22'}</b> </h3>
        {/* /> */}
       <main className='w-[95%] md:w-full mx-auto md:flex items-stretch justify-stretch'>
         <img src={pic} className='w-full h-96 md:w-1/2 md:h-auto md:px-4 md:py-10 md:border border-black' />

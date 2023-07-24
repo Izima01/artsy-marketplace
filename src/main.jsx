@@ -49,33 +49,33 @@ const router = createBrowserRouter([
         path:"/auctions/live/drops",
         element:<AuctionDrops />,
       },
+      {
+        path:"/products/checkout",
+        element: <Checkout />,
+        children: [
+          {
+            path:"cart",
+            element: <Cart />,
+          },
+          {
+            path:"shipping-details",
+            element: <Shipping />,
+          },
+          {
+            path:"payment-details",
+            element: <PaymentDetails />,
+          },
+          {
+            path:"thanks",
+            element: <ThankYou />,
+          },
+        ]
+      },
     ]
   },
   {
     path:"/auctions/live/:auctionId",
     element:<LiveAuction />,
-  },
-  {
-    path:"/products/checkout",
-    element: <Checkout />,
-    children: [
-      {
-        path:"cart",
-        element: <Cart />,
-      },
-      {
-        path:"shipping-details",
-        element: <Shipping />,
-      },
-      {
-        path:"payment-details",
-        element: <PaymentDetails />,
-      },
-      {
-        path:"thanks",
-        element: <ThankYou />,
-      },
-    ]
   },
 
 ]);

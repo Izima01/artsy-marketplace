@@ -9,6 +9,8 @@ import {VscSettings} from 'react-icons/vsc';
 import FilterPrice from '../Components/Marketplace/FilterPrice';
 import LoadingCard from '../Components/Marketplace/LoadingCard';
 import MobileAside from '../Components/Marketplace/MobileAside';
+import { useDispatch } from 'react-redux';
+import { cartActions } from '../store/cartSlice';
 
 const Marketplace = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -23,6 +25,7 @@ const Marketplace = () => {
   const [priceRange, setPriceRange] = useState([20, 90]);
   const [endNumber, setEndNumber] = useState(5);
   const productsRef = collection(db, "products");
+  const dispatch = useDispatch();
 
   // showing all the products if you're using a big screen
   useEffect(() => {
@@ -39,7 +42,7 @@ const Marketplace = () => {
         setProductsData(grabbedData);
         setFilteredProducts(grabbedData);
         setIsLoading(false);
-        // localStorage.setItem('products', JSON.stringify(grabbedData));
+        dispatch(cartActions.replaceCartData(grabbedData));
       } catch (err) {
         console.log(err);
       }
@@ -47,15 +50,6 @@ const Marketplace = () => {
     getMoviesList();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // custom effect for storing fetched data on local storage
-  // useEffect(() => {
-  //   let stored = JSON.parse(localStorage.getItem('products'));
-  //   // console.log(stored);
-  //   setProductsData(stored);
-  //   setIsLoading(false);
-  //   setFilteredProducts(stored);
-  // }, []);
 
   // searching for a product
   useEffect(() => {
@@ -151,7 +145,7 @@ const Marketplace = () => {
         </aside>
 
         {/* Main page for products */}
-        <main className='flex flex-col gap-6 w-full flex-wrap md:flex-row md:gap-0 md:justify-start'>
+        <main className='flex flex-col gap-6 w-full flex-wrap md:flex-row md:gap-0 md:justify-start mt-2'>
           {
             isLoading ? (
               <LoadingCard />

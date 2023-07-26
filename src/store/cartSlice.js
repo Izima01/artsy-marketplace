@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { updateCartData } from '../config/cartActions';
+import { updateCartData, removeCartItem } from '../config/cartActions';
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -12,10 +12,10 @@ const cartSlice = createSlice({
             state.isChanged = true;
             const newItem = action.payload;
             const existingItem = state.itemsList.find((item) => item.id === newItem.id);
-            updateCartData(newItem);
             if (existingItem) {
                 existingItem.quantity = newItem.quantity;
                 existingItem.totalPrice = newItem.price * newItem.quantity;
+                updateCartData(newItem, false);
             } else {
                 state.itemsList.push({
                     id: newItem.id,
@@ -26,14 +26,13 @@ const cartSlice = createSlice({
                     category: newItem.category,
                     pic: newItem.pic
                 });
+                updateCartData(newItem, true);
             }
         },
         removeFromCart(state, action) {
             state.isChanged = true;
-            console.log(action.payload);
-            const existingItem = state.itemsList.find((item) => item.id === action.payload.id);
-            existingItem.quantity = 0;
-            existingItem.totalPrice = 0;
+            state.itemsList = state.itemsList.filter((item) => item.id != action.payload);
+            removeCartItem(action.payload);
         },
         replaceCartData(state, action) {
             state.itemsList = [];
@@ -44,7 +43,6 @@ const cartSlice = createSlice({
                     state.itemsList.push(dat);
                 }
             });
-            console.log("gotten cart data", state.itemsList);
         }, openedCart(state) {
             state.isChanged = false;
         }

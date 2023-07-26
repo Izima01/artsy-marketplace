@@ -20,7 +20,6 @@ import PageLayout from './PageLayout';
 import Uploader from './Pages/Uploader';
 
 const router = createBrowserRouter([
-
   {
     element:<PageLayout />,
     errorElement: <ErrorPage />,

@@ -1,22 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import ProductCard from '../Components/Marketplace/ProductCard';
-import { db } from '../config/firebase.js'
-import { getDocs, collection } from 'firebase/firestore';
 import FilterCategory from '../Components/Marketplace/FilterCategory';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import {VscSettings} from 'react-icons/vsc';
 import FilterPrice from '../Components/Marketplace/FilterPrice';
 import LoadingCard from '../Components/Marketplace/LoadingCard';
 import MobileAside from '../Components/Marketplace/MobileAside';
-import { useDispatch } from 'react-redux';
-import { cartActions } from '../store/cartSlice';
+import { useFetchProductData } from '../config/cartActions.js';
 
 const Marketplace = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState("");
   const [searchTerm, setsearchTerm] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
 
   const [productsData, setProductsData] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -24,8 +20,7 @@ const Marketplace = () => {
   const [categories, setCategories] = useState([]);
   const [priceRange, setPriceRange] = useState([20, 90]);
   const [endNumber, setEndNumber] = useState(5);
-  const productsRef = collection(db, "products");
-  const dispatch = useDispatch();
+  const { data, isLoading } = useFetchProductData();
 
   // showing all the products if you're using a big screen
   useEffect(() => {
@@ -35,21 +30,9 @@ const Marketplace = () => {
   }, []);
 
   useEffect(() => {
-    const getMoviesList = async () => {
-      try {
-        const data = await getDocs(productsRef);
-        const grabbedData = data.docs.map((doc) => ({...doc.data(), id: doc.id}));
-        setProductsData(grabbedData);
-        setFilteredProducts(grabbedData);
-        setIsLoading(false);
-        dispatch(cartActions.replaceCartData(grabbedData));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getMoviesList();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setProductsData(data);
+    setFilteredProducts(data);
+  }, [data]);
 
   // searching for a product
   useEffect(() => {

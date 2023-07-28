@@ -49,6 +49,10 @@ const router = createBrowserRouter([
         element:<AuctionDrops />,
       },
       {
+        path:"/products/checkout/thanks",
+        element: <ThankYou />,
+      },
+      {
         path:"/products/checkout",
         element: <Checkout />,
         children: [
@@ -63,10 +67,6 @@ const router = createBrowserRouter([
           {
             path:"payment-details",
             element: <PaymentDetails />,
-          },
-          {
-            path:"thanks",
-            element: <ThankYou />,
           },
         ]
       },

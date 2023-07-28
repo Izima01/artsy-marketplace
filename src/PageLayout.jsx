@@ -11,7 +11,7 @@ const PageLayout = () => {
     const isChanged = useSelector((state) => state.cart.isChanged);
 
     return (
-        <div className="w-full bg-[#f0eeee]">
+        <div className="w-full bg-[#f7f5f5]">
         <header className="w-full flex justify-between items-center pt-6 px-4 sm:hidden">
             <AiOutlineMenu
                 size="32px"
